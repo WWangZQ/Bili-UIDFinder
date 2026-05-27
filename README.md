@@ -1,111 +1,67 @@
-# Bilibili UID 扫描工具
+# B站 UID 筛选工具
 
-一个基于 Python + Playwright 的小工具，用于批量访问 Bilibili 用户主页，筛选出满足以下条件的 UID 并导出：
+扫描 B站 UID，筛选**零级 + 纯英文昵称**的账号。
 
-- 用户等级为 0（`sic-BDC_svg-user_level_0`）
-- 用户昵称仅由大小写英文字母组成（不含中文、数字或其他符号）
-- 可导出 UID 和昵称（格式为：`UID - 昵称`）
-
----
-
-## ✨ 功能特性
-
-- 📌 扫描 Bilibili 用户 UID：从 `500XXXX` 到 `599XXXX`，后四位自定义
-- 🧠 智能判断等级为 0 用户（通过页面 class 检查）
-- 🧼 筛选昵称为纯英文字母的用户
-- 📄 导出匹配结果到 `uid.txt`，格式为：`5011234 - Alice`
-
----
-
-## 📦 安装依赖
-
-### 1. 安装 Python 依赖
+## 安装
 
 ```bash
-pip install playwright
-playwright install
+pip install httpx
 ```
 
----
+## 使用方式
 
-## ▶️ 使用方法
+### 按后缀扫描 (`main_api.py`)
 
-### 克隆或下载本项目：
+扫描所有以指定 4 位数为后缀的 UID（前缀 1-999，共 999 个）。
 
 ```bash
-git clone https://github.com/你的用户名/bilibili-uid-scanner.git
-cd bilibili-uid-scanner
+# 交互模式
+python main_api.py
+
+# 命令行模式
+python main_api.py --suffix 1314
+
+# 使用代理池
+python main_api.py --suffix 1314 --pool
 ```
 
-### 运行脚本：
+输出文件：`uid_{suffix}.txt`
+
+### 按回文扫描 (`main_palindrome.py`)
+
+扫描所有指定位数的回文 UID。
 
 ```bash
-python main.py
+python main_palindrome.py --digits 7
+python main_palindrome.py --digits 7 --lo 5000000 --hi 6000000 --pool
 ```
 
-### 按提示输入 4 位数字后缀：
+输出文件：`uid_palindrome_{n}d.txt`
 
-```
-请输入四位数后缀（如1234）：1234
-```
+### 代理池
 
-### 扫描结果将保存在当前目录下的 `uid.txt` 中，每行格式如下：
+`--pool` 自动从 Geonode / PubProxy 获取免费代理，验证后轮换使用，遇到 412 自动换代理。也可手动指定：
 
-```
-5011234 - Alice
-5041234 - David
+```bash
+python main_api.py --suffix 0622 --proxy http://host:port
 ```
 
----
-
-## 💡 示例输出
-
-### 终端输出示例：
+## 输出格式
 
 ```
-✔ 5011234：昵称 Alice
-✘ 5021234：昵称不合规：陌染芄烛
-✘ 5031234：非零级
-✔ 5041234：昵称 David
+nickname uid        ← 满足条件的（零级 + 纯英文昵称）
+...
+                    ← 空行
+ nickname uid       ← 全部结果（无昵称的前面为空格）
+...
 ```
 
-### 文件 uid.txt 内容示例：
+## 参数
 
-```
-5011234 - Alice
-5041234 - David
-```
-
----
-
-## 🔍 技术细节
-
-- 使用 **Playwright** 实现 Chromium 无头浏览器访问，速度快、稳定性强
-- 使用正则表达式匹配昵称格式（仅允许 A-Z, a-z）
-- 自动跳过非零级账号或不符合昵称规则的用户
-
----
-
-## 🧰 技术栈
-
-- Python 3.7+
-- Playwright (Chromium)
-- 正则表达式（re）
-- asyncio 异步框架
-
----
-
-## 📁 文件结构
-
-```
-bilibili-uid-scanner/
-├── main.py        # 主程序
-├── uid.txt        # 输出结果（运行后生成）
-└── README.md      # 项目说明文件
-```
-
----
-
-## 📜 License
-
-本项目基于 MIT 协议开源，欢迎学习、使用与修改，但请勿用于任何违法用途。
+| 参数 | 说明 |
+|------|------|
+| `--pool` | 使用免费代理池 |
+| `--proxy URL` | 手动指定代理 |
+| `--suffix` / `-s` | 四位数后缀（仅 `main_api.py`）|
+| `--digits` / `-d` | 回文位数（仅 `main_palindrome.py`）|
+| `--lo` / `--hi` | UID 范围（仅 `main_palindrome.py`）|

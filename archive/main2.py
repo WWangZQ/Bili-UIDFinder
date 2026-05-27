@@ -11,7 +11,7 @@ async def check_uid(suffix):
         browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
 
-        for prefix in range(500, 600):
+        for prefix in range(1, 999):
             uid = f"{prefix}{suffix:04d}"
             url = f"https://space.bilibili.com/{uid}"
             try:
@@ -49,7 +49,7 @@ async def check_uid(suffix):
         await browser.close()
 
     # 写入 UID 到文件
-    with open("uid.txt", "w", encoding="utf-8") as f:
+    with open("uid00.txt", "w", encoding="utf-8") as f:
         for uid in result:
             f.write(uid + "\n" + nickname)
 
