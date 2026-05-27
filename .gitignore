@@ -1,0 +1,3 @@
+__pycache__/
+uid_*.txt
+!uid_1314.txt
