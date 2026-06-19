@@ -388,13 +388,11 @@ public sealed class ScanEngine
 
                 var nickname = card.GetProperty("name").GetString() ?? "";
 
-                if (level != 0)
-                    return (uid, nickname, $"Lv.{level}");
+                // Lv.0 + English-only name = likely unused account
+                if (level == 0 && EnglishRe.IsMatch(nickname))
+                    return (uid, nickname, "found");
 
-                if (!EnglishRe.IsMatch(nickname))
-                    return (uid, nickname, "skip");
-
-                return (uid, nickname, "found");
+                return (uid, nickname, $"Lv.{level}");
             }
             catch (TaskCanceledException) { return (uid, "", "cancelled"); }
             catch (HttpRequestException) { await Task.Delay(TimeSpan.FromSeconds(RetryDelaySec), ct); }
