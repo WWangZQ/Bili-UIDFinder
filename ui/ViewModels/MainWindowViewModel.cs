@@ -27,8 +27,6 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     public string Suffix { get => _suffix; set { _suffix = value; OnPropertyChanged(); } }
 
     // Palindrome tab
-    private string _digits = "7";
-    public string Digits { get => _digits; set { _digits = value; OnPropertyChanged(); } }
     private string _uidLo = "";
     public string UidLo { get => _uidLo; set { _uidLo = value; OnPropertyChanged(); } }
     private string _uidHi = "";
@@ -139,12 +137,7 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
         }
         else // palindrome
         {
-            if (!int.TryParse(Digits, out var d) || d < 2 || d > 12)
-            {
-                StatusText = "错误：位数需在 2-12 之间";
-                return;
-            }
-            uids = ScanEngine.GeneratePalindromes(d);
+            uids = ScanEngine.GenerateAllPalindromes();
 
             if (!string.IsNullOrWhiteSpace(UidLo) && long.TryParse(UidLo.Trim(), out var lo))
                 uids = [.. uids.Where(u => long.Parse(u) >= lo)];

@@ -28,19 +28,14 @@
                 <StackPanel Spacing="8" Margin="0,8,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="24">
                         <StackPanel Spacing="4">
-                            <TextBlock Text="位数" FontSize="12" Foreground="#6b6b6b"/>
-                            <TextBox Text="{Binding Digits}" Width="60"
-                                     FontFamily="Consolas" FontSize="14" Watermark="7"/>
-                        </StackPanel>
-                        <StackPanel Spacing="4">
                             <TextBlock Text="UID 下限" FontSize="12" Foreground="#6b6b6b"/>
-                            <TextBox Text="{Binding UidLo}" Width="160"
-                                     FontFamily="Consolas" FontSize="14" Watermark="可选"/>
+                            <TextBox Text="{Binding UidLo}" Width="200"
+                                     FontFamily="Consolas" FontSize="14" Watermark="可选 (6-12位)"/>
                         </StackPanel>
                         <StackPanel Spacing="4">
                             <TextBlock Text="UID 上限" FontSize="12" Foreground="#6b6b6b"/>
-                            <TextBox Text="{Binding UidHi}" Width="160"
-                                     FontFamily="Consolas" FontSize="14" Watermark="可选"/>
+                            <TextBox Text="{Binding UidHi}" Width="200"
+                                     FontFamily="Consolas" FontSize="14" Watermark="可选 (6-12位)"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

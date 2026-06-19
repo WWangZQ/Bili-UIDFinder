@@ -218,6 +218,14 @@ public sealed class ScanEngine
         return uids;
     }
 
+    public static List<string> GenerateAllPalindromes(int minDigits = 6, int maxDigits = 12)
+    {
+        var all = new List<string>();
+        for (int d = minDigits; d <= maxDigits; d++)
+            all.AddRange(GeneratePalindromes(d));
+        return all;
+    }
+
     private static string Reverse(string s)
     {
         var arr = s.ToCharArray();
