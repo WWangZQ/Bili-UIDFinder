@@ -218,7 +218,7 @@ public sealed class ScanEngine
         return uids;
     }
 
-    public static List<string> GenerateAllPalindromes(int minDigits = 6, int maxDigits = 12)
+    public static List<string> GenerateAllPalindromes(int minDigits = 1, int maxDigits = 12)
     {
         var all = new List<string>();
         for (int d = minDigits; d <= maxDigits; d++)
