@@ -26,6 +26,10 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     private string _suffix = "";
     public string Suffix { get => _suffix; set { _suffix = value; OnPropertyChanged(); } }
 
+    // Template tab
+    private string _template = "";
+    public string Template { get => _template; set { _template = value; OnPropertyChanged(); } }
+
     // Palindrome tab
     private string _uidLo = "";
     public string UidLo { get => _uidLo; set { _uidLo = value; OnPropertyChanged(); } }
@@ -124,8 +128,8 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
 
     private async Task StartScanAsync()
     {
-        // Validate inputs
         List<string> uids;
+
         if (SelectedTab == 0) // suffix
         {
             if (string.IsNullOrWhiteSpace(Suffix) || Suffix.Length != 4 || !int.TryParse(Suffix, out _))
@@ -135,7 +139,28 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
             }
             uids = ScanEngine.GenerateSuffixUids(Suffix);
         }
-        else // palindrome
+        else if (SelectedTab == 1) // template
+        {
+            if (string.IsNullOrWhiteSpace(Template))
+            {
+                StatusText = "错误：请输入模板";
+                return;
+            }
+            var tpl = Template.Trim().ToUpper();
+            if (!tpl.Contains('X'))
+            {
+                StatusText = "错误：模板必须包含至少一个 X";
+                return;
+            }
+            int xCount = tpl.Count(c => c == 'X');
+            if (xCount > 7)
+            {
+                StatusText = $"错误：通配符 X 过多 ({xCount} 个)，最多 7 个";
+                return;
+            }
+            uids = ScanEngine.GenerateFromTemplate(tpl);
+        }
+        else // palindrome (tab 2)
         {
             uids = ScanEngine.GenerateAllPalindromes();
 

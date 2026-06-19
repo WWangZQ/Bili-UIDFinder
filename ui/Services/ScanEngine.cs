@@ -192,10 +192,42 @@ public sealed class ScanEngine
     public static List<string> GenerateSuffixUids(string suffix)
     {
         var sfx = int.Parse(suffix);
-        var multiplier = (int)Math.Pow(10, suffix.Length); // 10000 for 4-digit suffix
+        var multiplier = (int)Math.Pow(10, suffix.Length);
         var uids = new List<string>(999);
         for (int p = 1; p <= 999; p++)
-            uids.Add((p * multiplier + sfx).ToString());   // no leading zeros
+            uids.Add((p * multiplier + sfx).ToString());
+        return uids;
+    }
+
+    /// <summary>
+    /// Generate UIDs from a template where 'X'/'x' = wildcard digit.
+    /// Example: "XXX1314" → all 7-digit UIDs ending in 1314.
+    /// </summary>
+    public static List<string> GenerateFromTemplate(string template)
+    {
+        var chars = template.ToCharArray();
+        var xPositions = new List<int>();
+        for (int i = 0; i < chars.Length; i++)
+            if (chars[i] == 'X' || chars[i] == 'x')
+                xPositions.Add(i);
+
+        int count = (int)Math.Pow(10, xPositions.Count);
+        var uids = new List<string>(count);
+
+        for (int n = 0; n < count; n++)
+        {
+            // Fill wildcard positions with digits from n
+            var tmp = (char[])chars.Clone();
+            int val = n;
+            for (int i = xPositions.Count - 1; i >= 0; i--)
+            {
+                tmp[xPositions[i]] = (char)('0' + val % 10);
+                val /= 10;
+            }
+            // Skip if first digit is 0 (not a valid UID)
+            if (tmp[0] == '0') continue;
+            uids.Add(new string(tmp));
+        }
         return uids;
     }
 

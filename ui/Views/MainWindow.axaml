@@ -24,6 +24,16 @@
                     </StackPanel>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="按模板扫描">
+                <StackPanel Spacing="4" Margin="0,8,0,0">
+                    <TextBlock Text="模板 (X = 通配数字)" FontSize="12" Foreground="#6b6b6b"/>
+                    <TextBox Text="{Binding Template}" Width="240"
+                             FontFamily="Consolas" FontSize="14"
+                             Watermark="如 XXX1314 或 1314XXXX"/>
+                    <TextBlock FontSize="11" Foreground="#999"
+                               Text="示例: XXX1314 → 1001314~9991314, 1314XXXX → 13140000~13149999"/>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="按回文扫描">
                 <StackPanel Spacing="8" Margin="0,8,0,0">
                     <StackPanel Orientation="Horizontal" Spacing="24">
