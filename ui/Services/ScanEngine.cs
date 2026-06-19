@@ -178,9 +178,11 @@ public sealed class ScanEngine
     public event Action<bool>? ScanFinished;      // true if completed normally
 
     public bool Running { get; private set; }
-    public int Done { get; private set; }
+    private int _done;
+    public int Done => _done;
     public int Total { get; private set; }
-    public int FoundCount { get; private set; }
+    private int _foundCount;
+    public int FoundCount => _foundCount;
     public List<(string Uid, string Nickname, string Status)> Results { get; } = [];
 
     private CancellationTokenSource? _cts;
@@ -233,8 +235,8 @@ public sealed class ScanEngine
     {
         if (Running) return;
         Running = true;
-        Done = 0;
-        FoundCount = 0;
+        _done = 0;
+        _foundCount = 0;
         Total = uids.Count;
         Results.Clear();
         _cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
@@ -314,14 +316,14 @@ public sealed class ScanEngine
 
                 if (rStatus != "cancelled")
                 {
-                    if (rStatus == "found") FoundCount++;
+                    if (rStatus == "found") Interlocked.Increment(ref _foundCount);
                     Results.Add((rUid, rNick, rStatus));
 
                     var tag = rStatus == "found" ? "FOUND" : rStatus;
                     Log($"[{idx}/{Total}][{tag}] {rUid} {rNick}".TrimEnd());
                 }
 
-                Done = idx;
+                Interlocked.Increment(ref _done);
                 Progress?.Invoke(Done, Total, FoundCount);
             }
         }
