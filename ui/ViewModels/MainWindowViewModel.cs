@@ -90,8 +90,8 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
 
     public MainWindowViewModel()
     {
-        StartCommand = new RelayCommand(_ => _ = StartScanAsync(), _ => CanStart);
-        StopCommand = new RelayCommand(_ => StopScan(), _ => CanStop);
+        StartCommand = new RelayCommand(_ => _ = StartScanAsync());
+        StopCommand = new RelayCommand(_ => StopScan());
 
         // Wire engine events → UI thread
         _engine.LogReceived += msg =>
