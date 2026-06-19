@@ -146,16 +146,10 @@ public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
             }
             uids = ScanEngine.GeneratePalindromes(d);
 
-            if (!string.IsNullOrWhiteSpace(UidLo))
-            {
-                var lo = UidLo.Trim();
-                uids = [.. uids.Where(u => string.Compare(u, lo, StringComparison.Ordinal) >= 0)];
-            }
-            if (!string.IsNullOrWhiteSpace(UidHi))
-            {
-                var hi = UidHi.Trim();
-                uids = [.. uids.Where(u => string.Compare(u, hi, StringComparison.Ordinal) <= 0)];
-            }
+            if (!string.IsNullOrWhiteSpace(UidLo) && long.TryParse(UidLo.Trim(), out var lo))
+                uids = [.. uids.Where(u => long.Parse(u) >= lo)];
+            if (!string.IsNullOrWhiteSpace(UidHi) && long.TryParse(UidHi.Trim(), out var hi))
+                uids = [.. uids.Where(u => long.Parse(u) <= hi)];
         }
 
         if (uids.Count == 0)
