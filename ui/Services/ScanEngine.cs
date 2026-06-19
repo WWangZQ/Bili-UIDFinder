@@ -191,8 +191,8 @@ public sealed class ScanEngine
     {
         var sfx = int.Parse(suffix);
         var multiplier = (int)Math.Pow(10, suffix.Length); // 10000 for 4-digit suffix
-        var uids = new List<string>(999_999);
-        for (int p = 1; p <= 999_999; p++)
+        var uids = new List<string>(999);
+        for (int p = 1; p <= 999; p++)
             uids.Add((p * multiplier + sfx).ToString());   // no leading zeros
         return uids;
     }
